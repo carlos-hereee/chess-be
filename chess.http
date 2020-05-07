@@ -1,0 +1,4 @@
+### ROOT SERVER
+GET http://localhost:4000/
+### CHESS ROOT ENDPOINT
+GET http://localhost:4000/chess

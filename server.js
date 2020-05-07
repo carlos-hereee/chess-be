@@ -14,6 +14,8 @@ server.use(express.json());
 
 server.use("/chess", chessRoute);
 
+server.get("/", (req, res) => res.send("Backend Server for chess app"));
+
 server.listen(port, () => {
-	console.log(`\n *** Server listening on port ${port} ***\n`);
+	console.log(`\n*** Server listening on port ${port} ***\n`);
 });
