@@ -1,25 +1,18 @@
-const position = {
-	rook: [
-		{ rank: 1, file: "a" },
-		{ rank: 8, file: "a" },
-	],
-};
-// if (file[i] === "b" || file[i] === "f") {
-// 			board.push({
-// 				id: `${file[i]}:${rank[n]}`,
-// 				rank: rank[n],
-// 				file: file[i],
-// 				piece: "pawn",
-// 			});
-// 		} else if (file[i] === "a" && rank[n] === 1) {
-// 			board.push({
-// 				id: `${file[i]}:${rank[n]}`,
-// 				rank: rank[n],
-// 				file: file[i],
-// 				piece: "rook",
-// 			});
-// 		} else {
-// function createPiece() {}
+const position = [
+	(rook: {
+		piece: { piece: "rook", rank: 8, file: "a" },
+		piece: { piece: "rook", rank: 8, file: "g" },
+		piece: { piece: "rook", rank: 1, file: "g" },
+	}),
+];
+
+function setPiece(rank, file) {
+	for (let o = 0; o < Object.keys(position).length; o++) {
+		if (file === position[o][file] && rank === position[o][rank])
+			return position[o];
+		return "";
+	}
+}
 
 function createBoard() {
 	const file = ["a", "b", "c", "d", "e", "f", "g"];
@@ -31,7 +24,7 @@ function createBoard() {
 				id: `${file[i]}:${rank[n]}`,
 				rank: rank[n],
 				file: file[i],
-				piece: "",
+				piece: setPiece(rank[n], file[i]),
 			});
 		}
 	}
