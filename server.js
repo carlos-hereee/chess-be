@@ -5,7 +5,7 @@ const helmet = require("helmet");
 
 const port = process.env.PORT || 4000;
 
-const chessRoute = require("./routes/chessRoute");
+const chessRoute = require("./src/routes/chessRoute");
 
 const server = express();
 server.use(helmet());
