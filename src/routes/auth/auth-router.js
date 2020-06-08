@@ -37,6 +37,7 @@ router.post("/register", validateRegistration, async (req, res) => {
 		const token = generateToken({
 			profile: {
 				username: users.username,
+				email: users.email,
 			},
 		});
 
@@ -58,7 +59,7 @@ router.post("/register", validateRegistration, async (req, res) => {
 router.post("/login", validateLogin, (req, res) => {
 	// implement login
 	let { username, password } = req.body;
-	Users.find({ username })
+	Users.find(username)
 		.then((user) => {
 			if (user && bcrypt.compareSync(password, user.password)) {
 				const token = generateToken({ username: user.username });
