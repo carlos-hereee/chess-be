@@ -12,9 +12,11 @@ const {
 
 router.get("/", (req, res) => {
 	try {
-		res.send("route working");
+		const allUsers = Users.getAll();
+		res.status(200).json({ users: allUsers });
 	} catch (e) {
 		console.log("e", e);
+		res.status(404).json({ message: "could not be found", e: e });
 	}
 });
 
@@ -35,7 +37,6 @@ router.post("/register", validateRegistration, async (req, res) => {
 		const token = generateToken({
 			profile: {
 				username: users.username,
-				email: users.email,
 			},
 		});
 
@@ -54,23 +55,24 @@ router.post("/register", validateRegistration, async (req, res) => {
 });
 
 //post login
-router.post("/login", (req, res) => {
+router.post("/login", validateLogin, (req, res) => {
 	// implement login
 	let { username, password } = req.body;
-
-	Users.findBy({ username })
-		.first()
+	Users.find({ username })
 		.then((user) => {
 			if (user && bcrypt.compareSync(password, user.password)) {
-				const token = generateToken(user);
-				res.status(200).json({ token });
+				const token = generateToken({ username: user.username });
+				res.status(200).json({
+					profile: { email: user.email, username: username },
+					accessToken: token,
+				});
 			} else {
 				res.status(401).json({ message: "invalid credentials" });
 			}
 		})
 		.catch((err) => {
 			console.log(err);
-			res.status(500).json({ message: `server 500 error ${err}` });
+			res.status(500).json({ message: `server 500 error`, e: err });
 		});
 });
 

@@ -3,8 +3,13 @@ const db = require("../../data/db-config");
 module.exports = {
 	addNewUser,
 	getByUserId,
+	find,
+	getAll,
 };
 
+function getAll() {
+	return db("users");
+}
 function getByUserId(userId) {
 	return db("users").where({ userId }).first();
 }
@@ -15,4 +20,15 @@ function addNewUser(user) {
 		.then((userIds) => {
 			return getByUserId(userIds[0]);
 		});
+}
+function find(username) {
+	return db("users")
+		.where(function () {
+			this.where("username", "=", username).orWhere(
+				"email",
+				"=",
+				username
+			);
+		})
+		.first();
 }

@@ -3,15 +3,24 @@ GET http://localhost:4000/
 ### CHESS ROOT ENDPOINT
 GET http://localhost:4000/chess
 
-### Users
+### get all users
 GET http://localhost:4000/user/
 
-### Users
+### Users register
 POST  http://localhost:4000/user/register
 Content-Type: application/json 
 
 {
     "email": "email",
     "username" : "new_user",
+    "password": "password"
+}
+
+### USER LOGIN
+POST http://localhost:4000/user/login
+Content-Type: application/json
+
+{
+    "username": "new_user",
     "password": "password"
 }
