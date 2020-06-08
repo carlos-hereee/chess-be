@@ -5,6 +5,11 @@ const jwt = require("jsonwebtoken");
 const Users = require("./auth-model.js");
 const secrets = require("../../data/secrets.js");
 
+const {
+	validateRegistration,
+	validateLogin,
+} = require("../../middleware/validate-auth");
+
 router.get("/", (req, res) => {
 	try {
 		res.send("route working");
@@ -14,19 +19,38 @@ router.get("/", (req, res) => {
 });
 
 //post register
-router.post("/register", (req, res) => {
+router.post("/register", validateRegistration, async (req, res) => {
 	// implement registration
-	let user = req.body;
-	const hash = bcrypt.hashSync(user.password, 10);
-	user.password = hash;
-	Users.add(user)
-		.then((saved) => {
-			res.status(201).json(saved);
-		})
-		.catch((err) => {
-			console.log(err);
-			res.status(500).json(err);
+	let { username, password, email } = req.body;
+	const hash = bcrypt.hashSync(password, 10);
+	const newUser = {
+		username,
+		password,
+		email,
+		password: hash,
+	};
+
+	try {
+		const users = await Users.addNewUser(newUser);
+		const token = generateToken({
+			profile: {
+				username: users.username,
+				email: users.email,
+			},
 		});
+
+		res.status(201).json({
+			profile: {
+				firstName: users.firstName,
+				lastName: users.lastName,
+				email: users.email,
+			},
+			accessToken: token,
+		});
+	} catch (e) {
+		console.log(e);
+		res.status(500).json({ message: "unable to add user", e: e });
+	}
 });
 
 //post login

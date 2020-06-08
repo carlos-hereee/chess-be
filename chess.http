@@ -8,6 +8,7 @@ GET http://localhost:4000/user/
 
 ### Users
 POST  http://localhost:4000/user/register
+Content-Type: application/json 
 
 {
     "email": "email",
